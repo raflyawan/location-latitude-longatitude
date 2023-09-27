@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tabel Data CSV</title>
+  </head>
+  <body>
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Latitude</th>
+          <th>Longitude</th>
+          <th>Gambar</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <input type="file" id="csv-file" accept=".csv" />
+
+    <script>
+      document
+        .getElementById("csv-file")
+        .addEventListener("change", function (event) {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+              const content = e.target.result;
+              processData(content);
+            };
+
+            reader.readAsText(file);
+          }
+        });
+
+      function processData(csv) {
+        const lines = csv.split("\n");
+        const tableBody = document.querySelector("#data-table tbody");
+
+        // Hapus data yang ada sebelumnya
+        tableBody.innerHTML = "";
+
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (line) {
+            const cells = line.split(",");
+            const row = document.createElement("tr");
+
+            for (let j = 0; j < cells.length; j++) {
+              const cell = document.createElement(i === 1 ? "th" : "td");
+              if (j === 3) {
+                // Jika kolom ke-4 (indeks 3) adalah kolom gambar
+                const img = document.createElement("img");
+                img.src = cells[j];
+                cell.appendChild(img);
+              } else {
+                cell.textContent = cells[j];
+              }
+              row.appendChild(cell);
+            }
+
+            tableBody.appendChild(row);
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
