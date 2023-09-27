@@ -46,17 +46,21 @@
           const line = lines[i].trim();
           if (line) {
             const cells = line.split(",");
+
+            // Menghapus tanda kutip ganda dari setiap sel
+            const cleanCells = cells.map((cell) => cell.replace(/"/g, ""));
+
             const row = document.createElement("tr");
 
-            for (let j = 0; j < cells.length; j++) {
+            for (let j = 0; j < cleanCells.length; j++) {
               const cell = document.createElement(i === 1 ? "th" : "td");
               if (j === 3) {
                 // Jika kolom ke-4 (indeks 3) adalah kolom gambar
                 const img = document.createElement("img");
-                img.src = cells[j];
+                img.src = cleanCells[j];
                 cell.appendChild(img);
               } else {
-                cell.textContent = cells[j];
+                cell.textContent = cleanCells[j];
               }
               row.appendChild(cell);
             }
